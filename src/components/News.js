@@ -268,12 +268,12 @@ export class News extends Component {
 
 
     constructor() {
-        super()
-        console.log("hello world")
+        super();
         
-        this.state={
-            articles : this.articles,
-            loading:false
+
+        this.state = {
+            articles: this.articles,
+            loading: false
         }
 
     }
@@ -281,19 +281,19 @@ export class News extends Component {
         return (
             <div className='container my-3'>
                 <h2>New top headlines</h2>
+
                 <div className="row">
-                    <div className="col-md-4">
-                        <NewsItem title="my title" description=" My description" ImageUrl="https://cdn.theathletic.com/app/uploads/2023/10/28002545/Garcia-scaled.jpg" newsUrl="TODO"  />
+                    {this.state.articles.map((element) => {
+                        const title = element.title ? element.title.slice(0, 25) : '';
+                        const description = element.description ? element.description.slice(0, 100) : '';
+                        return <div className="col-md-4"  key={element.url} >
+                            <NewsItem title={title} description={description} ImageUrl={element.urlToImage} newsUrl={element.url} />
 
-                    </div>
-                    <div className="col-md-4">
-                        <NewsItem title="my title" description=" My description" />
+                        </div>
+                       
+                    })}
 
-                    </div>
-                    <div className="col-md-4">
-                        <NewsItem title="my title" description=" My description" />
 
-                    </div>
                 </div>
 
 
