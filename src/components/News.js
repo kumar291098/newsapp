@@ -16,8 +16,8 @@ export class News extends Component {
    }
 
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         
 
         this.state = {
@@ -25,11 +25,11 @@ export class News extends Component {
             loading: false,
             page:1,
         }
-
+        document.title=this.props.category;
 
     }
-    async componentDidMount(){
-        let url=`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=8a61e61cbc0b49cc9615eb6a602156a2&page=1&pageSize=${this.props.pageSize}`;
+    async updateNews(){
+        let url=`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=8a61e61cbc0b49cc9615eb6a602156a2&page=${this.state.page}&pageSize=${this.props.pageSize}`;
         this.setState({loading:true})
         let data=await fetch(url);
         let parseData=await data.json()
@@ -38,39 +38,55 @@ export class News extends Component {
             totalResults:parseData.totalResults,
             loading:false
         })
+    }
+    async componentDidMount(){
+        // let url=`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=8a61e61cbc0b49cc9615eb6a602156a2&page=1&pageSize=${this.props.pageSize}`;
+        // this.setState({loading:true})
+        // let data=await fetch(url);
+        // let parseData=await data.json()
+        // this.setState({
+        //     articles:parseData.articles,
+        //     totalResults:parseData.totalResults,
+        //     loading:false
+        // })
+            this.updateNews();
     }   
-
     
     handleNextClick= async ()=>{
-        console.log("Next");
-    if(!(this.state.page+1>Math.ceil(this.state.totalResults/this.props.pageSize))){
+        // console.log("Next");
+    // if(!(this.state.page+1>Math.ceil(this.state.totalResults/this.props.pageSize))){
 
         
-        let url=`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=8a61e61cbc0b49cc9615eb6a602156a2&page=${this.state.page+1}&pageSize=${this.props.pageSize}`;
-        this.setState({loading:true})
-        let data=await fetch(url);
-        let parseData=await data.json()
+    //     let url=`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=8a61e61cbc0b49cc9615eb6a602156a2&page=${this.state.page+1}&pageSize=${this.props.pageSize}`;
+    //     this.setState({loading:true})
+    //     let data=await fetch(url);
+    //     let parseData=await data.json()
         
-        this.setState({
-            loading:false,
-            page: this.state.page + 1,
-            articles:parseData.articles,
-        })
-        }
+    //     this.setState({
+    //         loading:false,
+    //         page: this.state.page + 1,
+    //         articles:parseData.articles,
+    //     })
+    //     }
+   
+        this.setState({page:this.state.page +1})
+        this.updateNews()
     }
     handlePrevClick=   async ()=>{
         
-        let url=`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=8a61e61cbc0b49cc9615eb6a602156a2&page=${this.state.page-1}&pageSize=${this.props.pageSize}`;
-        this.setState({loading:true})
-        let data=await fetch(url);
-        let parseData=await data.json()
+        // let url=`https://newsapi.org/v2/top-headlines?country=in&category=${this.props.category}&apiKey=8a61e61cbc0b49cc9615eb6a602156a2&page=${this.state.page-1}&pageSize=${this.props.pageSize}`;
+        // this.setState({loading:true})
+        // let data=await fetch(url);
+        // let parseData=await data.json()
         
-        this.setState({
-            loading:false,
-            page: this.state.page - 1,
-            articles:parseData.articles,
-        })
-        console.log("previous");
+        // this.setState({
+        //     loading:false,
+        //     page: this.state.page - 1,
+        //     articles:parseData.articles,
+        // })
+        // console.log("previous");
+        this.setState({page:this.state.page -1})
+        this.updateNews()
 
     }
 
@@ -80,7 +96,7 @@ export class News extends Component {
                 <h2 style={{textAlign: "center"}}>News top headlines</h2>
                 {this.state.loading && <Spinner/>}
                 <div className="row">
-                    {!this.state.loading &&  this.state.articles.map((element) => {
+                    {!this.state.loading &&  this.state.article && this.state.articles.map((element) => {
                         const title = element.title ? element.title.slice(0, 25) : '';
                         const description = element.description ? element.description.slice(0, 100) : '';
                         return <div className="col-md-4"  key={element.url} >
